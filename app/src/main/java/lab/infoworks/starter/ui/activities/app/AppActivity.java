@@ -69,9 +69,8 @@ public class AppActivity extends BaseActivity {
         NotificationCenter.addObserver(this, "RIDER_DATA_SYNC", (context, data) -> {
             //TODO:
             String result = data.getStringExtra("sync");
-            Log.d(TAG, "RIDER_DATA_SYNC: " + result);
             //Update UI
-            runOnUiThread(() -> statusTextView.setText(result));
+            runOnUiThread(() -> statusTextView.setText("WorkerManager Sync: " + result));
         });
     }
 

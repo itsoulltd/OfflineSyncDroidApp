@@ -92,6 +92,10 @@ dependencies {
         force = true //API 19 support
     }
     testImplementation("com.squareup.okhttp3:mockwebserver:$rootProject.okhttpVersion")
+    //Retrofit-2
+    implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofit2"
+    implementation "com.squareup.retrofit2:converter-gson:$rootProject.retrofit2"
+    implementation "com.squareup.retrofit2:converter-jackson:$rootProject.retrofit2"
     //java WebSocket
     implementation 'org.java-websocket:Java-WebSocket:1.3.6'
     //Rx-android
