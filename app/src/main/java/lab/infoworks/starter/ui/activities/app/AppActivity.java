@@ -10,7 +10,6 @@ import android.util.Log;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.multidex.BuildConfig;
 
 import java.io.IOException;
 
@@ -64,12 +63,15 @@ public class AppActivity extends BaseActivity {
             notifyTray();
         });
         //
-        boolean isDebug = BuildConfig.DEBUG;
-        appViewModel.offlineSyncRider("");
+        String url = ""; //BuildConfig.api_gateway;
+        appViewModel.offlineSyncRider(url);
         //
         NotificationCenter.addObserver(this, "RIDER_DATA_SYNC", (context, data) -> {
             //TODO:
-            Log.d(TAG, "RIDER_DATA_SYNC: " + data.getStringExtra("sync"));
+            String result = data.getStringExtra("sync");
+            Log.d(TAG, "RIDER_DATA_SYNC: " + result);
+            //Update UI
+            runOnUiThread(() -> statusTextView.setText(result));
         });
     }
 
