@@ -40,6 +40,12 @@ public class RiderRepositoryImpl implements RiderRepository {
                 , 1000);
     }
 
+    @Override @RequiresApi(api = Build.VERSION_CODES.N)
+    public void findRidersNotSynced(Consumer<List<Rider>> consumer) {
+        //TODO: Logic
+        findRiders(consumer);
+    }
+
     @Override
     public boolean isEmpty() {
         return dataSource.size() <= 0;

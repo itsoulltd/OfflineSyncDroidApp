@@ -11,6 +11,7 @@ import lab.infoworks.libshared.domain.repository.impl.RiderRepositoryImpl;
 public interface RiderRepository {
     static RiderRepository create(Context context) { return new RiderRepositoryImpl(context);}
     void findRiders(Consumer<List<Rider>> consumer);
+    void findRidersNotSynced(Consumer<List<Rider>> consumer);
     void update(Rider rider);
     boolean isEmpty();
     void addSampleData(Context context);

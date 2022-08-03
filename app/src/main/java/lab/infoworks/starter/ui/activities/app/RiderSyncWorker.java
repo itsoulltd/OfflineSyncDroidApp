@@ -9,6 +9,10 @@ import androidx.work.WorkerParameters;
 import java.util.HashMap;
 import java.util.Map;
 
+import lab.infoworks.libshared.domain.model.Rider;
+import lab.infoworks.libshared.domain.remote.RemoteConfig;
+import lab.infoworks.libshared.domain.remote.api.RiderApiService;
+import lab.infoworks.libshared.domain.remote.interceptors.BearerTokenInterceptor;
 import lab.infoworks.libshared.domain.repository.definition.RiderRepository;
 import lab.infoworks.libshared.notifications.NotificationCenter;
 
@@ -25,7 +29,7 @@ public class RiderSyncWorker extends Worker {
         this.jwtToken = workerParams.getInputData().getString("jwt-token");
     }
 
-    public RiderRepository getRepository() {
+    protected RiderRepository getRepository() {
         if (repository == null){
             repository = RiderRepository.create(getApplicationContext());
         }
@@ -35,7 +39,17 @@ public class RiderSyncWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        //TODO:
+        //
+        RiderApiService service = RemoteConfig.getInstance(this.baseUrl
+                , RiderApiService.class
+                , new BearerTokenInterceptor(this.jwtToken));
+        getRepository().findRidersNotSynced((riders) -> {
+            //TODO:Sync to Remote Service
+            for (Rider rider : riders) {
+                service.update(rider);
+            }
+        });
+        //
         Map<String, Object> data = new HashMap<>();
         data.put("sync", "success");
         NotificationCenter.postNotification(getApplicationContext(), "RIDER_DATA_SYNC", data);
