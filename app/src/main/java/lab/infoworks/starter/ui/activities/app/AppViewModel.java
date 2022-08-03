@@ -8,12 +8,16 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.work.Constraints;
 import androidx.work.Data;
+import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.NetworkType;
 import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
 
 import java.util.List;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import lab.infoworks.libshared.domain.model.Rider;
 import lab.infoworks.libshared.domain.model.VerificationResult;
@@ -53,20 +57,24 @@ public class AppViewModel extends AndroidViewModel {
                 .putString("jwt-token", "---")
                 .build();
         Constraints constraints = new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build();
-        //Example of OneTime WorkerRequest:
-        WorkRequest request = new OneTimeWorkRequest.Builder(RiderSyncWorker.class)
-                .setInputData(data)
-                .addTag("getPhotos")
-                .setConstraints(constraints)
-                .build();
-        //Example of Repeatable WorkRequest:
-        /*request = new PeriodicWorkRequest.Builder(EncryptedFileFetchingWorker.class, 15, TimeUnit.MINUTES)
-                .setInputData(data)
-                .addTag("getPhotos")
-                .setConstraints(constraints)
-                .build();
-        WorkManager.getInstance(getContext()).cancelAllWorkByTag("getPhotos");*/
         //
-        WorkManager.getInstance(getApplication().getApplicationContext()).enqueue(request);
+        //Example of OneTime WorkerRequest:
+        /*WorkRequest request = new OneTimeWorkRequest.Builder(RiderSyncWorker.class)
+                .setInputData(data)
+                .addTag("sync_rider")
+                .setConstraints(constraints)
+                .build();
+        WorkManager.getInstance(getApplication().getApplicationContext()).cancelAllWorkByTag("sync_rider");
+        WorkManager.getInstance(getApplication().getApplicationContext()).enqueue(request);*/
+        //
+        //Example of Repeatable WorkRequest:
+        PeriodicWorkRequest request = new PeriodicWorkRequest.Builder(RiderSyncWorker.class, 15, TimeUnit.MINUTES)
+                .setInputData(data)
+                .addTag("sync_rider")
+                .setConstraints(constraints)
+                .build();
+        WorkManager.getInstance(getApplication().getApplicationContext()).enqueueUniquePeriodicWork("sync_rider"
+                , ExistingPeriodicWorkPolicy.KEEP
+                , request);
     }
 }

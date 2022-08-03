@@ -19,6 +19,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import lab.infoworks.libshared.domain.remote.DownloadTracker;
 import lab.infoworks.libshared.domain.shared.AssetManager;
+import lab.infoworks.libshared.notifications.NotificationCenter;
 import lab.infoworks.libshared.notifications.SystemNotificationTray;
 import lab.infoworks.libui.activities.BaseActivity;
 import lab.infoworks.starter.R;
@@ -65,6 +66,17 @@ public class AppActivity extends BaseActivity {
         //
         boolean isDebug = BuildConfig.DEBUG;
         appViewModel.offlineSyncRider("");
+        //
+        NotificationCenter.addObserver(this, "RIDER_DATA_SYNC", (context, data) -> {
+            //TODO:
+            Log.d(TAG, "RIDER_DATA_SYNC: " + data.getStringExtra("sync"));
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        NotificationCenter.removeObserver(this, "RIDER_DATA_SYNC");
     }
 
     private void notifyTray(){

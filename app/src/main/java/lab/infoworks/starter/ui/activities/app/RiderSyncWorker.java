@@ -6,7 +6,11 @@ import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import lab.infoworks.libshared.domain.repository.definition.RiderRepository;
+import lab.infoworks.libshared.notifications.NotificationCenter;
 
 public class RiderSyncWorker extends Worker {
 
@@ -32,6 +36,9 @@ public class RiderSyncWorker extends Worker {
     @Override
     public Result doWork() {
         //TODO:
-        return null;
+        Map<String, Object> data = new HashMap<>();
+        data.put("sync", "success");
+        NotificationCenter.postNotification(getApplicationContext(), "RIDER_DATA_SYNC", data);
+        return Result.success();
     }
 }
