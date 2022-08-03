@@ -15,11 +15,13 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:manageSpaceActivity=".ui.activities.app.ManageSpaceActivity">
 
         <activity
             android:name=".ui.activities.splash.SplashActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,6 +31,7 @@
         </activity>
 
         <activity android:name=".ui.activities.app.AppActivity"/>
+        <activity android:name=".ui.activities.app.ManageSpaceActivity" />
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
