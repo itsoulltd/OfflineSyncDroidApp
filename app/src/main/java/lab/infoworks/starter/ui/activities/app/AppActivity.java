@@ -63,7 +63,7 @@ public class AppActivity extends BaseActivity {
             notifyTray();
         });
         //
-        String url = ""; //BuildConfig.api_gateway;
+        String url = "http://10.0.2.2:8080/rider"; //BuildConfig.api_gateway;
         appViewModel.offlineSyncRider(url);
         //
         NotificationCenter.addObserver(this, "RIDER_DATA_SYNC", (context, data) -> {
