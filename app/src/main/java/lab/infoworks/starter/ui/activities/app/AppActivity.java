@@ -21,6 +21,7 @@ import lab.infoworks.libshared.domain.shared.AssetManager;
 import lab.infoworks.libshared.notifications.NotificationCenter;
 import lab.infoworks.libshared.notifications.SystemNotificationTray;
 import lab.infoworks.libui.activities.BaseActivity;
+import lab.infoworks.starter.BuildConfig;
 import lab.infoworks.starter.R;
 
 
@@ -63,7 +64,7 @@ public class AppActivity extends BaseActivity {
             notifyTray();
         });
         //
-        String url = "http://10.0.2.2:8080/rider"; //BuildConfig.api_gateway;
+        String url = BuildConfig.api_gateway;
         appViewModel.offlineSyncRider(url);
         //
         NotificationCenter.addObserver(this, "RIDER_DATA_SYNC", (context, data) -> {
