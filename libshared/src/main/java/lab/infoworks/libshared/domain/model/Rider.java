@@ -4,7 +4,8 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import com.infoworks.lab.rest.models.Response;
+import java.util.List;
+import java.util.Map;
 
 @Entity(tableName = "rider", ignoredColumns = {"status", "error", "message", "payload", "event", "classType", "_isAutoIncremented"})
 public class Rider extends ResponseExt {
@@ -16,6 +17,8 @@ public class Rider extends ResponseExt {
     private Integer age;
     private String gender;
     private String email;
+    private boolean isSynced = false;
+    private List<Map<String, String>> images;
 
     @Ignore
     public Rider() {}
@@ -90,5 +93,21 @@ public class Rider extends ResponseExt {
     public Rider setEmail(String email) {
         this.email = email;
         return this;
+    }
+
+    public boolean isSynced() {
+        return isSynced;
+    }
+
+    public void setSynced(boolean synced) {
+        isSynced = synced;
+    }
+
+    public List<Map<String, String>> getImages() {
+        return images;
+    }
+
+    public void setImages(List<Map<String, String>> images) {
+        this.images = images;
     }
 }

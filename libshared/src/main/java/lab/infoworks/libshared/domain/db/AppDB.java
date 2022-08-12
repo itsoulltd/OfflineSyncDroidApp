@@ -5,15 +5,18 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.locks.ReentrantLock;
 
+import lab.infoworks.libshared.domain.db.dao.Converters;
 import lab.infoworks.libshared.domain.db.dao.RiderDAO;
 import lab.infoworks.libshared.domain.model.Rider;
 
 @Database(entities = {Rider.class}, version = 1)
+@TypeConverters({Converters.class})
 public abstract class AppDB extends RoomDatabase {
 
     public static final String DATABASE_NAME = "AppDatabase.db";
