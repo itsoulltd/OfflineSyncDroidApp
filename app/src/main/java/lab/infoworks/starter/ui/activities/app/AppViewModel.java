@@ -18,7 +18,6 @@ import androidx.work.WorkRequest;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import lab.infoworks.libshared.domain.model.Rider;
@@ -54,7 +53,6 @@ public class AppViewModel extends AndroidViewModel {
     }
 
     public void offlineSyncRider(String baseUrl){
-        baseUrl = baseUrl + "/files";
         String encodedBaseUrl = Base64.encodeToString(baseUrl.getBytes(StandardCharsets.UTF_8)
                 , Base64.URL_SAFE);
         Data data = new Data.Builder()
@@ -62,16 +60,6 @@ public class AppViewModel extends AndroidViewModel {
                 .putString("jwt-token", "---")
                 .build();
         Constraints constraints = new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build();
-        //
-        //Example of OneTime WorkerRequest:
-        /*WorkRequest request = new OneTimeWorkRequest.Builder(RiderSyncWorker.class)
-                .setInputData(data)
-                .addTag("sync_rider")
-                .setConstraints(constraints)
-                .build();
-        WorkManager.getInstance(getApplication().getApplicationContext()).cancelAllWorkByTag("sync_rider");
-        WorkManager.getInstance(getApplication().getApplicationContext()).enqueue(request);*/
-        //
         //Example of Repeatable WorkRequest:
         PeriodicWorkRequest request = new PeriodicWorkRequest.Builder(RiderSyncWorker.class, 15, TimeUnit.MINUTES)
                 .setInputData(data)
@@ -81,5 +69,25 @@ public class AppViewModel extends AndroidViewModel {
         WorkManager.getInstance(getApplication().getApplicationContext()).enqueueUniquePeriodicWork("sync_rider"
                 , ExistingPeriodicWorkPolicy.KEEP
                 , request);
+    }
+
+    public void offlineSyncRiderImages(String baseUrl){
+        String encodedBaseUrl = Base64.encodeToString(baseUrl.getBytes(StandardCharsets.UTF_8)
+                , Base64.URL_SAFE);
+        Data data = new Data.Builder()
+                .putString("baseUrl", encodedBaseUrl)
+                .putString("jwt-token", "---")
+                .build();
+        Constraints constraints = new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build();
+        //
+        //Example of OneTime WorkerRequest:
+        WorkRequest request = new OneTimeWorkRequest.Builder(RiderImageSyncWorker.class)
+                .setInputData(data)
+                .addTag("sync_rider_imae")
+                .setConstraints(constraints)
+                .build();
+        WorkManager.getInstance(getApplication().getApplicationContext()).cancelAllWorkByTag("sync_rider_image");
+        WorkManager.getInstance(getApplication().getApplicationContext()).enqueue(request);
+        //
     }
 }

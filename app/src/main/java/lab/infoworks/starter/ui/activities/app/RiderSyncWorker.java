@@ -12,7 +12,6 @@ import java.util.Map;
 
 import lab.infoworks.libshared.domain.model.Rider;
 import lab.infoworks.libshared.domain.remote.RemoteConfig;
-import lab.infoworks.libshared.domain.remote.api.FilesApiService;
 import lab.infoworks.libshared.domain.remote.api.RiderApiService;
 import lab.infoworks.libshared.domain.remote.interceptors.BearerTokenInterceptor;
 import lab.infoworks.libshared.domain.repository.definition.RiderRepository;
@@ -24,7 +23,6 @@ public class RiderSyncWorker extends Worker {
     private String baseUrl;
     private String jwtToken;
     private RiderRepository repository;
-    private FilesApiService fileService;
 
     public RiderSyncWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -40,17 +38,21 @@ public class RiderSyncWorker extends Worker {
         return repository;
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     public Result doWork() {
         //
-        RiderApiService service = RemoteConfig.getInstance(this.baseUrl
+        RiderApiService service = RemoteConfig.getInstance(this.baseUrl + "/rider"
                 , RiderApiService.class
                 , new BearerTokenInterceptor(this.jwtToken));
+        //
         getRepository().findRidersNotSynced((riders) -> {
-            //TODO:Sync to Remote Service
+            //Sync to Remote Service:
             for (Rider rider : riders) {
+                if (rider.isSynced()) continue;
                 service.update(rider);
+                //Update Rider:
+                rider.setSynced(true);
+                getRepository().update(rider);
             }
         });
         //
@@ -58,5 +60,21 @@ public class RiderSyncWorker extends Worker {
         data.put("sync", "success");
         NotificationCenter.postNotification(getApplicationContext(), "RIDER_DATA_SYNC", data);
         return Result.success();
+    }
+
+    public String getBaseUrl() {
+        return baseUrl;
+    }
+
+    public void setBaseUrl(String baseUrl) {
+        this.baseUrl = baseUrl;
+    }
+
+    public String getJwtToken() {
+        return jwtToken;
+    }
+
+    public void setJwtToken(String jwtToken) {
+        this.jwtToken = jwtToken;
     }
 }

@@ -18,7 +18,9 @@ public class Rider extends ResponseExt {
     private String gender;
     private String email;
     private boolean isSynced = false;
+    //
     private List<Map<String, String>> images;
+    private boolean isImageSynced = false;
 
     @Ignore
     public Rider() {}
@@ -109,5 +111,13 @@ public class Rider extends ResponseExt {
 
     public void setImages(List<Map<String, String>> images) {
         this.images = images;
+    }
+
+    public boolean isImageSynced() {
+        return isImageSynced;
+    }
+
+    public void setImageSynced(boolean imageSynced) {
+        isImageSynced = imageSynced;
     }
 }
