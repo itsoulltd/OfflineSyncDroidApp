@@ -1,6 +1,7 @@
 package lab.infoworks.starter.ui.activities.app;
 
 import android.app.Application;
+import android.util.Base64;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -15,6 +16,7 @@ import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -52,8 +54,11 @@ public class AppViewModel extends AndroidViewModel {
     }
 
     public void offlineSyncRider(String baseUrl){
+        baseUrl = baseUrl + "/files";
+        String encodedBaseUrl = Base64.encodeToString(baseUrl.getBytes(StandardCharsets.UTF_8)
+                , Base64.URL_SAFE);
         Data data = new Data.Builder()
-                .putString("baseUrl", baseUrl)
+                .putString("baseUrl", encodedBaseUrl)
                 .putString("jwt-token", "---")
                 .build();
         Constraints constraints = new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build();

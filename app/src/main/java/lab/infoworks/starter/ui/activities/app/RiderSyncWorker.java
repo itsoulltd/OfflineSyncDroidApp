@@ -1,6 +1,7 @@
 package lab.infoworks.starter.ui.activities.app;
 
 import android.content.Context;
+import android.util.Base64;
 
 import androidx.annotation.NonNull;
 import androidx.work.Worker;
@@ -11,6 +12,7 @@ import java.util.Map;
 
 import lab.infoworks.libshared.domain.model.Rider;
 import lab.infoworks.libshared.domain.remote.RemoteConfig;
+import lab.infoworks.libshared.domain.remote.api.FilesApiService;
 import lab.infoworks.libshared.domain.remote.api.RiderApiService;
 import lab.infoworks.libshared.domain.remote.interceptors.BearerTokenInterceptor;
 import lab.infoworks.libshared.domain.repository.definition.RiderRepository;
@@ -22,10 +24,12 @@ public class RiderSyncWorker extends Worker {
     private String baseUrl;
     private String jwtToken;
     private RiderRepository repository;
+    private FilesApiService fileService;
 
     public RiderSyncWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
-        this.baseUrl = workerParams.getInputData().getString("baseUrl");
+        String encodedUrl = workerParams.getInputData().getString("baseUrl");
+        this.baseUrl = new String(Base64.decode(encodedUrl, Base64.URL_SAFE));
         this.jwtToken = workerParams.getInputData().getString("jwt-token");
     }
 
