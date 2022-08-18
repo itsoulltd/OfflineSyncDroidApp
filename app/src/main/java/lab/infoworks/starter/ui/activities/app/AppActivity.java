@@ -167,6 +167,7 @@ public class AppActivity extends BaseActivity {
                     Bitmap scaledImage = AssetManager.createScaledCopyFrom(imageBitmap, 500);
                     String base64 = AssetManager.readImageAsBase64(scaledImage, Bitmap.CompressFormat.JPEG, 90);
                     //TODO:
+                    Log.d(TAG, "onActivityResult: " + base64);
                 } catch (IOException e) {
                     Log.d(TAG, "onActivityResult: " + e.getMessage());
                 }
@@ -188,6 +189,7 @@ public class AppActivity extends BaseActivity {
                             Bitmap scaledImage = AssetManager.createScaledCopyFrom(imageBitmap, 500);
                             String base64 = AssetManager.readImageAsBase64(scaledImage, Bitmap.CompressFormat.JPEG, 90);
                             //TODO:
+                            Log.d(TAG, "onActivityResult: " + base64);
                         } catch (IOException e) {
                             Log.d(TAG, "onActivityResult: " + e.getMessage());
                         }
