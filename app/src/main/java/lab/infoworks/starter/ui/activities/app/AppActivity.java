@@ -120,8 +120,11 @@ public class AppActivity extends BaseActivity {
                 .enqueue((ios) -> {
                     //Now do whatever you want:
                     try {
-                        Bitmap img = AssetManager.readAsImage(ios, 0);
-                        System.out.println("");
+                        Bitmap imageBitmap = AssetManager.readAsImage(ios, 0);
+                        Bitmap scaledImage = AssetManager.createScaledCopyFrom(imageBitmap, 500);
+                        String base64 = AssetManager.readImageAsBase64(scaledImage, Bitmap.CompressFormat.JPEG, 90);
+                        //TODO:
+                        Log.d(TAG, "startDownload: " + base64);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
