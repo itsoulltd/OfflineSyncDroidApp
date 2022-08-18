@@ -3,4 +3,5 @@
     <string name="title_activity_splash">SplashActivity</string>
     <string name="hello_title">\"Hello Tray\"</string>
     <string name="hello_message">\"Hi there! welcome to app dev\"</string>
+    <string name="toast_no_image_selected">No Image Selected!</string>
 </resources>

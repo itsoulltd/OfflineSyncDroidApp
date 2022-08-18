@@ -1,13 +1,19 @@
 package lab.infoworks.starter.ui.activities.app;
 
+import static lab.infoworks.starter.util.OpenCameraForImage.REQUEST_CODE_OPEN_CAMERA_FOR_IMAGE;
+import static lab.infoworks.starter.util.OpenMediaForImage.REQUEST_CODE_OPEN_MEDIA_FOR_IMAGE;
+
 import android.app.DownloadManager;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -145,5 +151,52 @@ public class AppActivity extends BaseActivity {
     @OnClick(R.id.showDownloadsButton)
     public void showDownloads(){
         DownloadTracker.viewOnGoingDownloads(this);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_OPEN_CAMERA_FOR_IMAGE) {
+            if (resultCode != RESULT_OK) {
+                Toast.makeText(this, getString(R.string.toast_no_image_selected), Toast.LENGTH_LONG);
+            } else {
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                //convertBitmapIntoStr(imageBitmap);
+                try {
+                    Bitmap scaledImage = AssetManager.createScaledCopyFrom(imageBitmap, 500);
+                    String base64 = AssetManager.readImageAsBase64(scaledImage, Bitmap.CompressFormat.JPEG, 90);
+                    //TODO:
+                } catch (IOException e) {
+                    Log.d(TAG, "onActivityResult: " + e.getMessage());
+                }
+            }
+        }
+        else if (requestCode == REQUEST_CODE_OPEN_MEDIA_FOR_IMAGE) {
+            if (resultCode != RESULT_OK) {
+                Toast.makeText(this, getString(R.string.toast_no_image_selected), Toast.LENGTH_LONG);
+            } else {
+                //Handle Picked Image:
+                if (data != null && data.getData() != null) {
+                    Uri selectedImageUri = data.getData();
+                    try {
+                        Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(
+                                this.getContentResolver(),
+                                selectedImageUri);
+                        //convertBitmapIntoStr(imageBitmap);
+                        try {
+                            Bitmap scaledImage = AssetManager.createScaledCopyFrom(imageBitmap, 500);
+                            String base64 = AssetManager.readImageAsBase64(scaledImage, Bitmap.CompressFormat.JPEG, 90);
+                            //TODO:
+                        } catch (IOException e) {
+                            Log.d(TAG, "onActivityResult: " + e.getMessage());
+                        }
+                    }
+                    catch (IOException e) {
+                        Log.d(TAG, "onActivityResult: " + e.getMessage());
+                    }
+                }
+            }
+        }
     }
 }
