@@ -16,6 +16,7 @@ import lab.infoworks.libshared.domain.remote.api.RiderApiService;
 import lab.infoworks.libshared.domain.remote.interceptors.BearerTokenInterceptor;
 import lab.infoworks.libshared.domain.repository.definition.RiderRepository;
 import lab.infoworks.libshared.notifications.NotificationCenter;
+import lab.infoworks.starter.BuildConfig;
 
 public class RiderSyncWorker extends Worker {
 
@@ -41,6 +42,7 @@ public class RiderSyncWorker extends Worker {
     @NonNull @Override
     public Result doWork() {
         //
+        //RemoteConfig.activateSslCertificatePinner(BuildConfig.domain_name, BuildConfig.ssl_public_key);
         RiderApiService service = RemoteConfig.getInstance(this.baseUrl + "/rider"
                 , RiderApiService.class
                 , new BearerTokenInterceptor(this.jwtToken));

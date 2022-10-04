@@ -16,6 +16,7 @@ import lab.infoworks.libshared.domain.remote.RemoteConfig;
 import lab.infoworks.libshared.domain.remote.api.FilesApiService;
 import lab.infoworks.libshared.domain.remote.interceptors.BearerTokenInterceptor;
 import lab.infoworks.libshared.notifications.NotificationCenter;
+import lab.infoworks.starter.BuildConfig;
 
 public class RiderImageSyncWorker extends RiderSyncWorker {
 
@@ -28,6 +29,7 @@ public class RiderImageSyncWorker extends RiderSyncWorker {
     @NonNull @Override
     public Result doWork() {
         //
+        //RemoteConfig.activateSslCertificatePinner(BuildConfig.domain_name, BuildConfig.ssl_public_key);
         FilesApiService fileService = RemoteConfig.getInstance(getBaseUrl() + "/files"
                 , FilesApiService.class
                 , new BearerTokenInterceptor(getJwtToken()));
